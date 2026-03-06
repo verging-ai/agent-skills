@@ -1,0 +1,19 @@
+{
+  "name": "verging-ai-skills",
+  "owner": {
+    "name": "verging.ai",
+    "email": "support@verging.ai"
+  },
+  "metadata": {
+    "description": "verging.ai AI services - Face swap, video enhancement, background removal and more",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "faceswap",
+      "description": "AI换脸服务 - 直接在命令行中使用 verging.ai 的 AI 换脸功能。支持本地视频文件和图片、远程视频URL (YouTube、Bilibili等)、远程图片URL，自动下载远程资源，实时进度跟踪。",
+      "source": "./skills/faceswap",
+      "category": "media"
+    }
+  ]
+}
