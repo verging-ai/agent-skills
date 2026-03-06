@@ -57,6 +57,22 @@ tags:
 
 当用户执行 /faceswap 命令时，请按以下步骤执行：
 
+### 0. 检查并安装依赖
+在执行任何操作之前，检查以下工具是否已安装，如未安装则自动安装：
+
+| 工具 | 检查命令 | 自动安装命令 |
+|------|----------|-------------|
+| yt-dlp | `which yt-dlp` | `pip install yt-dlp` 或 `brew install yt-dlp` |
+| ffmpeg | `which ffmpeg` | `brew install ffmpeg` |
+| ffprobe | `which ffprobe` | (随 ffmpeg 一起安装) |
+| curl | `which curl` | (通常系统自带) |
+
+安装逻辑：
+1. 先检查工具是否存在 (`which <tool>`)
+2. 如果不存在，检测系统包管理器 (macOS: brew, Linux: apt/yum)
+3. 自动安装缺失的工具
+4. 安装完成后继续执行后续步骤
+
 ### 1. 参数解析
 - 解析 --video 和 --face 参数
 - 如果是远程 URL，需要下载到本地
@@ -117,6 +133,7 @@ tags:
 用户: /faceswap -v ./input.mp4 -f ./my-face.jpg --start 5 --end 15
 
 你:
+0. **检查并安装依赖** (yt-dlp, ffmpeg, ffprobe)
 1. 检查本地文件存在
 2. 获取视频时长
 3. **裁剪视频** (ffmpeg -ss 5 -to 15)
@@ -130,6 +147,7 @@ tags:
 用户: /faceswap -v ./input.mp4 -f ./my-face.jpg
 
 你:
+0. **检查并安装依赖** (yt-dlp, ffmpeg, ffprobe 如未安装)
 1. 检查本地文件存在
 2. 获取视频时长
 3. 调用 API 获取用户信息
@@ -141,6 +159,7 @@ tags:
 
 ## 注意事项
 
+- **依赖自动安装**: 首次使用时，如检测到缺少 yt-dlp、ffmpeg、ffprobe，会自动安装
 - API Key 可以通过 --api-key 参数传入，也可以从环境变量 VERGING_API_KEY 读取
 - 如果用户没有提供 API Key，提示他们去 https://verging.ai 获取
 - 视频时长最大支持 30 秒
