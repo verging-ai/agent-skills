@@ -5,14 +5,14 @@ AI-powered media processing skills for Claude Code.
 ## Features
 
 ### Face Swap
-AI换脸服务 - 直接在命令行中使用 verging.ai 的 AI 换脸功能。
+AI-powered face swap service - Use verging.ai directly from command line.
 
-- 支持本地视频文件和图片
-- 支持远程视频 URL (YouTube，Bilibili 等)
-- 支持远程图片 URL
-- 自动下载远程资源
-- 实时进度跟踪
-- 视频裁剪功能（指定起止时间）
+- Support local video files and images
+- Support remote video URLs (YouTube, Bilibili, etc.)
+- Support remote image URLs
+- Auto-download remote resources
+- Real-time progress tracking
+- Video trimming (specify start/end time)
 
 ## Installation
 
@@ -33,16 +33,16 @@ AI换脸服务 - 直接在命令行中使用 verging.ai 的 AI 换脸功能。
 ### Face Swap
 
 ```bash
-# 基本用法
+# Basic usage
 /faceswap --video ./input.mp4 --face ./my-face.jpg
 
-# 指定时间范围
+# Specify time range
 /faceswap -v ./video.mp4 -f ./face.jpg --start 5 --end 30
 
-# 使用远程视频
+# Use remote video
 /faceswap -v "https://youtube.com/watch?v=xxx" -f ./face.jpg --hd
 
-# 自动下载结果
+# Auto download result
 /faceswap -v ./video.mp4 -f ./face.jpg --download
 ```
 
@@ -73,8 +73,11 @@ export VERGING_API_URL="https://verging.ai/api/v1"
 
 1. Visit [https://verging.ai](https://verging.ai)
 2. Register/Login
-3. Go to API Keys section
-4. Create a new API Key
+3. Click your username in the top right corner
+4. Select **API Keys** from the dropdown menu
+5. Create a new API Key
+
+![API Keys Location](./docs/api-keys-location.png)
 
 ## Credits
 
