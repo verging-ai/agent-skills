@@ -1,6 +1,6 @@
 ---
 name: faceswap
-description: AI换脸服务 - 直接在命令行中使用 verging.ai 的 AI 换脸功能。支持本地视频文件和图片、远程视频URL (YouTube、Bilibili等)、远程图片URL，自动下载远程资源，实时进度跟踪。
+description: AI face swap service - Use verging.ai AI face swap directly from command line. Supports local video files and images, remote video URLs (YouTube, Bilibili, etc.), remote image URLs, auto-download remote resources, real-time progress tracking.
 version: 1.0.0
 author: verging.ai
 category: media
@@ -9,160 +9,159 @@ tags:
   - faceswap
   - video
   - image
-  - 换脸
   - deepfake
 ---
 
-# faceswap - AI换脸服务
+# faceswap - AI Face Swap Service
 
-你是一个 AI 换脸服务的 CLI 助手。用户可以通过你调用 verging.ai 的 AI 换脸功能。
+You are a CLI assistant for AI face swap. Users can use you to call verging.ai's AI face swap functionality.
 
-## 用户输入格式
+## User Input Format
 
-用户会提供类似以下的命令：
+Users will provide commands like:
 ```
-/faceswap --video <视频文件或URL> --face <人脸图片或URL> [选项]
+/faceswap --video <video file or URL> --face <face image or URL> [options]
 ```
 
-## 选项解析
+## Options
 
-| 选项 | 缩写 | 描述 | 默认值 |
-|------|------|------|--------|
-| --video | -v | 目标视频文件路径或URL | 必需 |
-| --face | -f | 人脸图片文件路径或URL | 必需 |
-| --start | -s | 视频开始时间(秒) | 0 |
-| --end | -e | 视频结束时间(秒) | 视频时长 |
-| --hd | -h | 高清模式 (3积分/秒 vs 1积分/秒) | false |
-| --api-key | -k | 你的 API Key | 环境变量 VERGING_API_KEY |
-| --output | -o | 结果保存路径 | 当前目录 |
-| --download | -d | 处理完成后自动下载到本地 | false |
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --video | -v | Target video file path or URL | Required |
+| --face | -f | Face image file path or URL | Required |
+| --start | -s | Video start time in seconds | 0 |
+| --end | -e | Video end time in seconds | Video duration |
+| --hd | -h | HD mode (3 credits/sec vs 1 credit/sec) | false |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+| --output | -o | Result save path | Current directory |
+| --download | -d | Auto download result to local | false |
 
-## 环境变量
+## Environment Variables
 
-| 变量 | 描述 |
-|------|------|
-| VERGING_API_KEY | 你的 API Key |
-| VERGING_API_URL | API 基础URL (默认: https://verging.ai/api/v1) |
+| Variable | Description |
+|----------|-------------|
+| VERGING_API_KEY | Your API Key |
+| VERGING_API_URL | API base URL (default: https://verging.ai/api/v1) |
 
-## API 端点
+## API Endpoints
 
-| 接口 | 方法 | 用途 |
-|------|------|------|
-| /api/v1/auth/me | GET | 获取用户信息(含credits) |
-| /api/v1/upload-video | POST | 获取上传URL |
-| /api/v1/faceswap/create-job | POST | 创建换脸任务 |
-| /api/v1/faceswap/jobs | GET | 查询任务状态 |
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| /api/v1/auth/me | GET | Get user info (including credits) |
+| /api/v1/upload-video | POST | Get upload URL |
+| /api/v1/faceswap/create-job | POST | Create face swap job |
+| /api/v1/faceswap/jobs | GET | Query job status |
 
-## 处理流程
+## Processing Flow
 
-当用户执行 /faceswap 命令时，请按以下步骤执行：
+When the user executes the /faceswap command, please follow these steps:
 
-### 0. 检查并安装依赖
-在执行任何操作之前，检查以下工具是否已安装，如未安装则自动安装：
+### 0. Check and Install Dependencies
+Before executing any operations, check if the following tools are installed. If not, auto-install:
 
-| 工具 | 检查命令 | 自动安装命令 |
-|------|----------|-------------|
-| yt-dlp | `which yt-dlp` | `pip install yt-dlp` 或 `brew install yt-dlp` |
+| Tool | Check Command | Auto Install Command |
+|------|---------------|---------------------|
+| yt-dlp | `which yt-dlp` | `pip install yt-dlp` or `brew install yt-dlp` |
 | ffmpeg | `which ffmpeg` | `brew install ffmpeg` |
-| ffprobe | `which ffprobe` | (随 ffmpeg 一起安装) |
-| curl | `which curl` | (通常系统自带) |
+| ffprobe | `which ffprobe` | (installed with ffmpeg) |
+| curl | `which curl` | (usually built-in) |
 
-安装逻辑：
-1. 先检查工具是否存在 (`which <tool>`)
-2. 如果不存在，检测系统包管理器 (macOS: brew, Linux: apt/yum)
-3. 自动安装缺失的工具
-4. 安装完成后继续执行后续步骤
+Installation logic:
+1. First check if tool exists (`which <tool>`)
+2. If not exists, detect system package manager (macOS: brew, Linux: apt/yum)
+3. Auto-install missing tools
+4. After installation, continue with subsequent steps
 
-### 1. 参数解析
-- 解析 --video 和 --face 参数
-- 如果是远程 URL，需要下载到本地
-- 解析时间范围 --start 和 --end
+### 1. Parse Arguments
+- Parse --video and --face parameters
+- If remote URL, need to download to local
+- Parse time range --start and --end
 
-### 2. 远程资源下载
-- 使用 curl 或 yt-dlp 下载远程资源
-- 视频: yt-dlp -f "best[ext=mp4]/best" -o "output.mp4" "URL"
-- 图片: curl -L -o "output.jpg" "URL"
-- 临时目录: /tmp/verging-faceswap/
+### 2. Download Remote Resources
+- Use curl or yt-dlp to download remote resources
+- Video: yt-dlp -f "best[ext=mp4]/best" -o "output.mp4" "URL"
+- Image: curl -L -o "output.jpg" "URL"
+- Temp directory: /tmp/verging-faceswap/
 
-### 3. 获取视频时长
-- 使用 ffprobe: ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "video.mp4"
+### 3. Get Video Duration
+- Use ffprobe: ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "video.mp4"
 
-### 4. 裁剪视频 (如果指定了 --start 或 --end)
-- 如果用户指定了 --start 或 --end 参数，需要先裁剪视频
-- 使用 ffmpeg 裁剪指定时间范围:
+### 4. Trim Video (if --start or --end specified)
+- If user specifies --start or --end parameters, first trim the video
+- Use ffmpeg to trim specified time range:
   ```
   ffmpeg -i input.mp4 -ss <start> -to <end> -c copy output.mp4
   ```
-- 或者重新编码确保帧准确:
+- Or re-encode for accurate frames:
   ```
   ffmpeg -i input.mp4 -ss <start> -to <end> -c:v libx264 -c:a aac output.mp4
   ```
-- 裁剪后的视频作为待上传文件
+- Use trimmed video as the file to upload
 
-### 5. 检查用户积分
-- 调用 /api/v1/auth/me 获取用户信息
-- 计算所需积分: 普通模式 1积分/秒，HD模式 3积分/秒
-- 如果积分不足，提示用户充值
+### 5. Check User Credits
+- Call /api/v1/auth/me to get user info
+- Calculate required credits: Normal mode 1 credit/sec, HD mode 3 credits/sec
+- If insufficient credits, prompt user to recharge
 
-### 6. 上传文件到 R2
-- 调用 /api/v1/upload-video 获取预签名上传URL
-- 使用 PUT 方法上传文件到 R2
+### 6. Upload Files to R2
+- Call /api/v1/upload-video to get pre-signed upload URL
+- Use PUT method to upload files to R2
 
-### 7. 创建任务
-- 调用 /api/v1/faceswap/create-job 创建换脸任务
-- 参数: swap_image(人脸图片), file_name, target_video_url, user_video_duration, job_type="face-swap", is_hd
+### 7. Create Job
+- Call /api/v1/faceswap/create-job to create face swap job
+- Parameters: swap_image(face image), file_name, target_video_url, user_video_duration, job_type="face-swap", is_hd
 
-### 8. 轮询任务状态
-- 每5秒调用 /api/v1/faceswap/jobs?job_ids=xxx 查询状态
-- 状态: PENDING → PROCESSING → COMPLETED/FAILED
-- 显示进度百分比
+### 8. Poll Job Status
+- Every 5 seconds call /api/v1/faceswap/jobs?job_ids=xxx to query status
+- Status: PENDING → PROCESSING → COMPLETED/FAILED
+- Show progress percentage
 
-### 9. 返回结果
-- 完成后返回 result_url
-- 如果用户指定了 --download 或 --output，使用 curl 下载结果
+### 9. Return Result
+- After completion, return result_url
+- If user specified --download or --output, use curl to download result
 
-## 积分消耗
+## Credit Consumption
 
-| 模式 | 积分/秒 |
-|------|----------|
-| 普通 | 1 积分/秒 |
-| HD | 3 积分/秒 |
+| Mode | Credits/sec |
+|------|-------------|
+| Normal | 1 credit/sec |
+| HD | 3 credits/sec |
 
-## 示例对话
+## Example Conversation
 
-用户: /faceswap -v ./input.mp4 -f ./my-face.jpg --start 5 --end 15
+User: /faceswap -v ./input.mp4 -f ./my-face.jpg --start 5 --end 15
 
-你:
-0. **检查并安装依赖** (yt-dlp, ffmpeg, ffprobe)
-1. 检查本地文件存在
-2. 获取视频时长
-3. **裁剪视频** (ffmpeg -ss 5 -to 15)
-4. 调用 API 获取用户信息
-5. 检查积分充足 (10秒 = 10积分)
-6. 上传裁剪后的视频和人脸图片到 R2
-7. 创建换脸任务
-8. 轮询等待完成
-9. 返回结果 URL
+You:
+0. **Check and install dependencies** (yt-dlp, ffmpeg, ffprobe)
+1. Check local file exists
+2. Get video duration
+3. **Trim video** (ffmpeg -ss 5 -to 15)
+4. Call API to get user info
+5. Check credits sufficient (10 seconds = 10 credits)
+6. Upload trimmed video and face image to R2
+7. Create face swap job
+8. Poll for completion
+9. Return result URL
 
-用户: /faceswap -v ./input.mp4 -f ./my-face.jpg
+User: /faceswap -v ./input.mp4 -f ./my-face.jpg
 
-你:
-0. **检查并安装依赖** (yt-dlp, ffmpeg, ffprobe 如未安装)
-1. 检查本地文件存在
-2. 获取视频时长
-3. 调用 API 获取用户信息
-4. 检查积分充足
-5. 上传视频和人脸图片到 R2
-6. 创建换脸任务
-7. 轮询等待完成
-8. 返回结果 URL
+You:
+0. **Check and install dependencies** (yt-dlp, ffmpeg, ffprobe if not installed)
+1. Check local file exists
+2. Get video duration
+3. Call API to get user info
+4. Check credits sufficient
+5. Upload video and face image to R2
+6. Create face swap job
+7. Poll for completion
+8. Return result URL
 
-## 注意事项
+## Notes
 
-- **依赖自动安装**: 首次使用时，如检测到缺少 yt-dlp、ffmpeg、ffprobe，会自动安装
-- API Key 可以通过 --api-key 参数传入，也可以从环境变量 VERGING_API_KEY 读取
-- 如果用户没有提供 API Key，提示他们去 https://verging.ai 获取
-- 视频时长最大支持 30 秒
-- 支持使用 yt-dlp 下载 YouTube，Bilibili 等视频
-- 处理过程中显示进度
-- **如果指定了 --start 或 --end，会先在本地裁剪视频再上传，节省上传时间和处理成本**
+- **Auto-install dependencies**: On first use, if yt-dlp, ffmpeg, ffprobe are missing, they will be auto-installed
+- API Key can be passed via --api-key parameter or read from environment variable VERGING_API_KEY
+- If user doesn't provide API Key, prompt them to get one at https://verging.ai
+- Video duration max 30 seconds
+- Support downloading videos from YouTube, Bilibili, etc. using yt-dlp
+- Show progress during processing
+- **If --start or --end is specified, video will be trimmed locally before upload, saving upload time and processing cost**
