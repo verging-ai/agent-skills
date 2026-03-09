@@ -3,9 +3,9 @@
 Swap faces in videos using AI. Just tell the agent what video and face image you want to use.
 
 ## Get API Key
-1. Visit.ai
-2. Login → Click username → API Keys
- https://verging3. Create key → Set: export VERGING_API_KEY="your_key"
+1. Visit https://verging.ai
+2. Login → Click user avatar (top right) → Select "API Keys" from dropdown
+3. Create key → Set: export VERGING_API_KEY="your_key"
 
 ## Options (optional)
 - --start N: Start time in seconds
