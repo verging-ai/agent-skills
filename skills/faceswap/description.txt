@@ -1,46 +1,18 @@
 # faceswap - AI Face Swap
 
-Swap faces in videos with one command.
-
-## Quick Start
-```bash
-/faceswap -v video.mp4 -f face.jpg
-```
+Swap faces in videos using AI. Just tell the agent what video and face image you want to use.
 
 ## Get API Key
-1. Go to https://verging.ai
+1. Visit.ai
 2. Login → Click username → API Keys
-3. Create a new key
-4. Set: export VERGING_API_KEY="your_key"
+ https://verging3. Create key → Set: export VERGING_API_KEY="your_key"
 
-## Examples
-```bash
-# Basic
-/faceswap -v ./video.mp4 -f ./my-face.jpg
-
-# Remote video
-/faceswap -v "https://youtube.com/watch?v=xxx" -f ./face.jpg
-
-# Trim to 5-15 seconds
-/faceswap -v ./video.mp4 -f ./face.jpg --start 5 --end 15
-
-# HD quality
-/faceswap -v ./video.mp4 -f ./face.jpg --hd
-
-# Download result automatically
-/faceswap -v ./video.mp4 -f ./face.jpg --download
-```
-
-## Options
-| Option | Description |
-|--------|-------------|
-| -v, --video | Video file or URL (YouTube, Bilibili...) |
-| -f, --face | Face image file or URL |
-| --start | Start time in seconds (default: 0) |
-| --end | End time in seconds |
-| --hd | HD mode (3 credits/sec) |
-| --download | Auto download result |
+## Options (optional)
+- --start N: Start time in seconds
+- --end N: End time in seconds
+- --hd: HD quality (3 credits/sec)
+- --download: Save result to local
 
 ## Credits
-- Normal: 1 credit/second
-- HD: 3 credits/second
+- Normal: 1 credit/sec
+- HD: 3 credits/sec
