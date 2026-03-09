@@ -2,6 +2,12 @@
 
 Swap faces in videos using AI. Just tell the agent what video and face image you want to use.
 
+## Install
+```bash
+/plugin marketplace add verging-ai/agent-skills
+/plugin install faceswap
+```
+
 ## Get API Key
 1. Visit https://verging.ai
 2. Login → Click user avatar (top right) → Select "API Keys" from dropdown
