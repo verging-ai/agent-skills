@@ -160,7 +160,7 @@ You:
 
 - **Auto-install dependencies**: On first use, if yt-dlp, ffmpeg, ffprobe are missing, they will be auto-installed
 - API Key can be passed via --api-key parameter or read from environment variable VERGING_API_KEY
-- If user doesn't provide API Key, prompt them to get one at https://verging.ai
+- **If user doesn't provide API Key**: Prompt user to get one at https://verging.ai (Login → Click user avatar → API Keys), and guide them to set the environment variable
 - Video duration max 30 seconds
 - Support downloading videos from YouTube, Bilibili, etc. using yt-dlp
 - Show progress during processing
