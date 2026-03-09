@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "faceswap",
-      "description": "AI换脸服务 - 直接在命令行中使用 verging.ai 的 AI 换脸功能。支持本地视频文件和图片、远程视频URL (YouTube、Bilibili等)、远程图片URL，自动下载远程资源，实时进度跟踪。",
+      "description": "AI face swap service - Use verging.ai directly from command line. Supports local video files, remote URLs, auto-download, real-time progress tracking.",
       "source": "./skills/faceswap",
       "category": "media"
     }
