@@ -1,0 +1,32 @@
+# faceswap - AI Face Swap Service
+
+AI-powered face swap service via command line.
+
+## What It Does
+Swap faces in videos using verging.ai's AI technology. Simply provide a target video and a face image, and the AI will swap the faces automatically.
+
+## Features
+- Supports local video files and images
+- Supports remote video URLs (YouTube, Bilibili, etc.)
+- Supports remote image URLs
+- Auto-downloads remote resources
+- Real-time progress tracking
+- Video trimming (specify start/end time)
+
+## How to Use
+```bash
+/faceswap --video ./video.mp4 --face ./face.jpg
+/faceswap -v "https://youtube.com/watch?v=xxx" -f ./face.jpg --hd
+/faceswap -v ./video.mp4 -f ./face.jpg --start 5 --end 15
+```
+
+## Requirements
+- verging.ai API Key (get from https://verging.ai)
+- yt-dlp, ffmpeg, ffprobe (auto-installed if missing)
+
+## Credits
+- Normal mode: 1 credit/second
+- HD mode: 3 credits/second
+
+## Support
+Email: support@verging.ai
