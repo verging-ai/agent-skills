@@ -1,15 +1,21 @@
 ---
 name: faceswap
 description: AI face swap service - Use verging.ai AI face swap directly from command line. Supports local video files and images, remote video URLs (YouTube, Bilibili, etc.), remote image URLs, auto-download remote resources, real-time progress tracking.
-version: 1.0.0
+version: 1.0.1
 author: verging.ai
 category: media
-tags:
-  - ai
-  - faceswap
-  - video
-  - image
-  - deepfake
+user-invocable: true
+metadata:
+  openclaw:
+    requires:
+      env:
+        - VERGING_API_KEY
+      bins:
+        - yt-dlp-downloader-skill
+        - ffmpeg
+        - ffprobe
+        - curl
+    primaryEnv: VERGING_API_KEY
 ---
 
 # faceswap - AI Face Swap Service
@@ -52,17 +58,21 @@ Users will provide commands like:
 | /api/v1/faceswap/create-job | POST | Create face swap job |
 | /api/v1/faceswap/jobs | GET | Query job status |
 
+## Dependencies
+
+This skill requires:
+- **yt-dlp-downloader-skill**: For downloading remote videos (YouTube, Bilibili, etc.). Install first: `clawhub install yt-dlp-downloader-skill`
+- **ffmpeg/ffprobe**: For video trimming (optional, only when --start or --end specified)
+- **curl**: Usually built-in
+
 ## Processing Flow
 
 When the user executes the /faceswap command, please follow these steps:
 
-### 0. No Pre-check Dependencies (Efficient On-Demand Download)
+### 0. Check Dependencies
 
-DO NOT check or install dependencies upfront. Install them only when actually needed:
-
-- **yt-dlp**: Install only when user provides a remote video URL (YouTube, Bilibili, etc.)
-- **ffmpeg/ffprobe**: Install only when user specifies --start or --end for video trimming
-- **curl**: Usually built-in, rarely needs installation
+- If user provides a remote video URL, ensure yt-dlp-downloader-skill is installed
+- For local videos without trimming, no additional tools needed
 
 ### 1. Parse Arguments
 - Parse --video and --face parameters
@@ -70,9 +80,9 @@ DO NOT check or install dependencies upfront. Install them only when actually ne
 - Parse time range --start and --end
 
 ### 2. Download Remote Resources
-- Use curl or yt-dlp to download remote resources
-- Video: yt-dlp -f "best[ext=mp4]/best" -o "output.mp4" "URL"
-- Image: curl -L -o "output.jpg" "URL"
+- If user provides a remote video URL (YouTube, Bilibili, etc.), use yt-dlp-downloader-skill to download
+- If yt-dlp-downloader-skill is not installed, prompt user to install it first: `clawhub install yt-dlp-downloader-skill`
+- For images: use curl to download
 - Temp directory: /tmp/verging-faceswap/
 
 ### 3. Get Video Duration
@@ -124,22 +134,19 @@ DO NOT check or install dependencies upfront. Install them only when actually ne
 User: /faceswap -v ./input.mp4 -f ./my-face.jpg --start 5 --end 15
 
 You:
-0. **On-demand install dependencies** - Only install yt-dlp/ffmpeg when actually needed during execution
 1. Parse arguments
 2. Check if video needs trimming (--start/--end specified)
-3. If trimming needed, install ffmpeg first
-4. Get video duration
-5. Check credits sufficient (10 seconds = 10 credits)
-6. Upload trimmed video and face image to R2
-7. Create face swap job
-8. Poll for completion
-9. Return result URL
+3. Get video duration
+4. Check credits sufficient (10 seconds = 10 credits)
+5. Upload video and face image to R2
+6. Create face swap job
+7. Poll for completion
+8. Return result URL
 
 User: /faceswap -v ./input.mp4 -f ./my-face.jpg
 
 You:
-0. **On-demand install** - No remote URL, so no yt-dlp needed; no trimming, so no ffmpeg needed
-1. Parse arguments
+1. Parse arguments - local video, no trimming needed
 2. Get video duration
 3. Call API to get user info
 4. Check credits sufficient
@@ -150,13 +157,38 @@ You:
 
 ## Notes
 
-- **Efficient on-demand dependency installation**: Only install tools when actually needed:
-  - yt-dlp: Only when user provides remote video URL (YouTube, Bilibili, etc.)
-  - ffmpeg/ffprobe: Only when user specifies --start or --end for video trimming
-  - curl: Usually built-in
+- This skill uses yt-dlp-downloader-skill for remote video downloads (YouTube, Bilibili, etc.)
+- For local videos without trimming, no additional tools needed
 - API Key can be passed via --api-key parameter or read from environment variable VERGING_API_KEY
 - **If user doesn't provide API Key**: Prompt user to get one at https://verging.ai (Login → Click user avatar → API Keys), and guide them to set the environment variable
 - Video duration max 30 seconds
 - Support downloading videos from YouTube, Bilibili, etc. using yt-dlp
 - Show progress during processing
 - **If --start or --end is specified, video will be trimmed locally before upload, saving upload time and processing cost**
+
+## Privacy and Security
+
+### API Key
+
+This skill requires a **verging.ai API Key**. Get it from:
+1. Visit https://verging.ai
+2. Login → Click user avatar (top right) → Select "API Keys"
+3. Create a new API key
+
+**Security recommendations:**
+- Use a dedicated API key with minimal permissions
+- Never expose your API key in public repositories
+- Set it via environment variable: `export VERGING_API_KEY="your_key"`
+
+### Data Handling
+
+- **Video uploads:** Videos are uploaded to verging.ai's R2 storage for processing
+- **Temporary files:** Local temporary files are stored in `/tmp/verging-faceswap/` and cleaned up after processing
+- **Result videos:** Processed videos are returned via a public URL
+- **No data retention:** This skill does not store any user data beyond the session
+
+### Legal Notice
+
+- Only process media you have rights to
+- Be aware of local laws regarding deepfake technology
+- Use responsibly and ethically
