@@ -56,21 +56,13 @@ Users will provide commands like:
 
 When the user executes the /faceswap command, please follow these steps:
 
-### 0. Check and Install Dependencies
-Before executing any operations, check if the following tools are installed. If not, auto-install:
+### 0. No Pre-check Dependencies (Efficient On-Demand Download)
 
-| Tool | Check Command | Auto Install Command |
-|------|---------------|---------------------|
-| yt-dlp | `which yt-dlp` | `pip install yt-dlp` or `brew install yt-dlp` |
-| ffmpeg | `which ffmpeg` | `brew install ffmpeg` |
-| ffprobe | `which ffprobe` | (installed with ffmpeg) |
-| curl | `which curl` | (usually built-in) |
+DO NOT check or install dependencies upfront. Install them only when actually needed:
 
-Installation logic:
-1. First check if tool exists (`which <tool>`)
-2. If not exists, detect system package manager (macOS: brew, Linux: apt/yum)
-3. Auto-install missing tools
-4. After installation, continue with subsequent steps
+- **yt-dlp**: Install only when user provides a remote video URL (YouTube, Bilibili, etc.)
+- **ffmpeg/ffprobe**: Install only when user specifies --start or --end for video trimming
+- **curl**: Usually built-in, rarely needs installation
 
 ### 1. Parse Arguments
 - Parse --video and --face parameters
@@ -132,11 +124,11 @@ Installation logic:
 User: /faceswap -v ./input.mp4 -f ./my-face.jpg --start 5 --end 15
 
 You:
-0. **Check and install dependencies** (yt-dlp, ffmpeg, ffprobe)
-1. Check local file exists
-2. Get video duration
-3. **Trim video** (ffmpeg -ss 5 -to 15)
-4. Call API to get user info
+0. **On-demand install dependencies** - Only install yt-dlp/ffmpeg when actually needed during execution
+1. Parse arguments
+2. Check if video needs trimming (--start/--end specified)
+3. If trimming needed, install ffmpeg first
+4. Get video duration
 5. Check credits sufficient (10 seconds = 10 credits)
 6. Upload trimmed video and face image to R2
 7. Create face swap job
@@ -146,8 +138,8 @@ You:
 User: /faceswap -v ./input.mp4 -f ./my-face.jpg
 
 You:
-0. **Check and install dependencies** (yt-dlp, ffmpeg, ffprobe if not installed)
-1. Check local file exists
+0. **On-demand install** - No remote URL, so no yt-dlp needed; no trimming, so no ffmpeg needed
+1. Parse arguments
 2. Get video duration
 3. Call API to get user info
 4. Check credits sufficient
@@ -158,7 +150,10 @@ You:
 
 ## Notes
 
-- **Auto-install dependencies**: On first use, if yt-dlp, ffmpeg, ffprobe are missing, they will be auto-installed
+- **Efficient on-demand dependency installation**: Only install tools when actually needed:
+  - yt-dlp: Only when user provides remote video URL (YouTube, Bilibili, etc.)
+  - ffmpeg/ffprobe: Only when user specifies --start or --end for video trimming
+  - curl: Usually built-in
 - API Key can be passed via --api-key parameter or read from environment variable VERGING_API_KEY
 - **If user doesn't provide API Key**: Prompt user to get one at https://verging.ai (Login → Click user avatar → API Keys), and guide them to set the environment variable
 - Video duration max 30 seconds
