@@ -51,12 +51,12 @@ Users will provide commands like:
 
 ## API Endpoints
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| /api/v1/auth/me | GET | Get user info (including credits) |
-| /api/v1/upload-video | POST | Get upload URL |
-| /api/v1/faceswap/create-job | POST | Create face swap job |
-| /api/v1/faceswap/jobs | GET | Query job status |
+| Endpoint | Method | Format | Purpose |
+|----------|--------|--------|---------|
+| /api/v1/auth/me | GET | - | Get user info (including credits) |
+| /api/v1/upload-video | POST | Form Data | Get R2 presigned upload URL |
+| /api/v1/faceswap/create-job | POST | Form Data | Create face swap job |
+| /api/v1/faceswap/jobs | GET | - | Query job status |
 
 ## Authentication
 
@@ -86,28 +86,51 @@ You can get your API key from https://verging.ai (Login → Click avatar → API
 curl -H "Authorization: ApiKey $VERGING_API_KEY" \
   https://verging.ai/api/v1/auth/me
 
-# Get upload URL
+# Step 1: Get presigned upload URL for video
 curl -X POST -H "Authorization: ApiKey $VERGING_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"file_name": "video.mp4", "content_type": "video/mp4"}' \
+  -F "video_file_name=video.mp4" \
+  -F "job_type=face-swap" \
   https://verging.ai/api/v1/upload-video
 
-# Create face swap job
+# The response contains:
+# {
+#   "result": {
+#     "url": "https://...r2.cloudflarestorage.com/...mp4?X-Amz-...",
+#     "public_url": "https://img.panpan8.com/face-swap/2026-03-11/xxx.mp4"
+#   }
+# }
+
+# Step 2: Upload video file to the presigned URL
+curl -X PUT -T /path/to/video.mp4 \
+  "https://...presigned-url-from-step-1..."
+
+# Step 3: Get presigned upload URL for face image (same method)
 curl -X POST -H "Authorization: ApiKey $VERGING_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "swap_image": "https://your-bucket.r2.cloudflarestorage.com/face.jpg",
-    "file_name": "face.jpg",
-    "target_video_url": "https://your-bucket.r2.cloudflarestorage.com/video.mp4",
-    "user_video_duration": 10,
-    "job_type": "face-swap",
-    "is_hd": false
-  }' \
+  -F "video_file_name=face.jpg" \
+  -F "job_type=face-swap" \
+  https://verging.ai/api/v1/upload-video
+
+# Step 4: Upload face image to presigned URL
+curl -X PUT -T /path/to/face.jpg \
+  "https://...presigned-url..."
+
+# Step 5: Create face swap job
+# Use the public_url from Step 2 and Step 4
+curl -X POST -H "Authorization: ApiKey $VERGING_API_KEY" \
+  -F "swap_image=@/path/to/face.jpg" \
+  -F "file_name=face.jpg" \
+  -F "target_video_url=https://img.panpan8.com/face-swap/2026-03-11/xxx.mp4" \
+  -F "user_video_duration=10" \
+  -F "is_hd=false" \
   https://verging.ai/api/v1/faceswap/create-job
 
 # Query job status
 curl -H "Authorization: ApiKey $VERGING_API_KEY" \
   "https://verging.ai/api/v1/faceswap/jobs?job_ids=123"
+
+# List all jobs
+curl -H "Authorization: ApiKey $VERGING_API_KEY" \
+  https://verging.ai/api/v1/faceswap/jobs
 ```
 
 **Important:** 
@@ -161,13 +184,23 @@ When the user executes the /faceswap command, please follow these steps:
 - Calculate required credits: Normal mode 1 credit/sec, HD mode 3 credits/sec
 - If insufficient credits, prompt user to recharge
 
-### 6. Upload Files to R2
-- Call /api/v1/upload-video to get pre-signed upload URL
-- Use PUT method to upload files to R2
+### 6. Upload Video to R2
+- Call `/api/v1/upload-video` with Form Data (`video_file_name`, `job_type`)
+- Get presigned upload URL from response
+- Upload video file to presigned URL using PUT method
+- Save the `public_url` from response for next step
 
-### 7. Create Job
-- Call /api/v1/faceswap/create-job to create face swap job
-- Parameters: swap_image(face image), file_name, target_video_url, user_video_duration, job_type="face-swap", is_hd
+### 7. Upload Face Image to R2
+- Same as step 6, but use the face image file
+- Save the `public_url`
+
+### 8. Create Job
+- Call `/api/v1/faceswap/create-job` with Form Data:
+  - `swap_image`: Face image file (will be re-uploaded to R2)
+  - `file_name`: Original file name
+  - `target_video_url`: The video public URL from step 6
+  - `user_video_duration`: Video duration in seconds
+  - `is_hd`: true/false
 
 ### 8. Poll Job Status
 - Every 5 seconds call /api/v1/faceswap/jobs?job_ids=xxx to query status
