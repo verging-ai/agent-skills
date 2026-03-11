@@ -66,6 +66,17 @@ All API requests require authentication via the `Authorization` header:
 Authorization: ApiKey <your_api_key>
 ```
 
+**⚠️ Important: There is a space between "ApiKey" and your key!**
+
+Example:
+```bash
+# ✅ Correct
+Authorization: ApiKey vrg_sk_123456...
+
+# ❌ Wrong (missing space)
+Authorization: ApiKeyvrg_sk_123456...
+```
+
 You can get your API key from https://verging.ai (Login → Click avatar → API Keys).
 
 ### Authentication Examples
