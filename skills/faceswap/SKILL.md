@@ -58,6 +58,51 @@ Users will provide commands like:
 | /api/v1/faceswap/create-job | POST | Create face swap job |
 | /api/v1/faceswap/jobs | GET | Query job status |
 
+## Authentication
+
+All API requests require authentication via the `Authorization` header:
+
+```bash
+Authorization: ApiKey <your_api_key>
+```
+
+You can get your API key from https://verging.ai (Login → Click avatar → API Keys).
+
+### Authentication Examples
+
+```bash
+# Check user info
+curl -H "Authorization: ApiKey $VERGING_API_KEY" \
+  https://verging.ai/api/v1/auth/me
+
+# Get upload URL
+curl -X POST -H "Authorization: ApiKey $VERGING_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"file_name": "video.mp4", "content_type": "video/mp4"}' \
+  https://verging.ai/api/v1/upload-video
+
+# Create face swap job
+curl -X POST -H "Authorization: ApiKey $VERGING_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "swap_image": "https://your-bucket.r2.cloudflarestorage.com/face.jpg",
+    "file_name": "face.jpg",
+    "target_video_url": "https://your-bucket.r2.cloudflarestorage.com/video.mp4",
+    "user_video_duration": 10,
+    "job_type": "face-swap",
+    "is_hd": false
+  }' \
+  https://verging.ai/api/v1/faceswap/create-job
+
+# Query job status
+curl -H "Authorization: ApiKey $VERGING_API_KEY" \
+  "https://verging.ai/api/v1/faceswap/jobs?job_ids=123"
+```
+
+**Important:** 
+- Replace `$VERGING_API_KEY` with your actual API key or set it as an environment variable
+- The `Authorization` header uses format: `ApiKey <key>` (not `Bearer <key>`)
+
 ## Dependencies
 
 This skill requires:
