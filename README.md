@@ -14,6 +14,15 @@ AI-powered face swap service - Use verging.ai directly from command line.
 - Real-time progress tracking
 - Video trimming (specify start/end time)
 
+### Background Removal
+AI-powered background removal service - Remove background from images.
+
+- Support local images (JPG, PNG, WebP)
+- Support remote image URLs
+- Auto-download remote resources
+- Real-time progress tracking
+- Maximum file size: 10MB
+
 ## Installation
 
 ### 1. Add Marketplace
@@ -25,7 +34,11 @@ AI-powered face swap service - Use verging.ai directly from command line.
 ### 2. Install Skills
 
 ```bash
+# Install face swap skill
 /plugin install faceswap
+
+# Install background removal skill
+/plugin install background-removal
 ```
 
 ## Usage
@@ -46,7 +59,7 @@ AI-powered face swap service - Use verging.ai directly from command line.
 /faceswap -v ./video.mp4 -f ./face.jpg --download
 ```
 
-### Options
+### Face Swap Options
 
 | Option | Short | Description | Default |
 |--------|-------|-------------|---------|
@@ -55,6 +68,28 @@ AI-powered face swap service - Use verging.ai directly from command line.
 | --start | -s | Start time in seconds | 0 |
 | --end | -e | End time in seconds | Video duration |
 | --hd | -h | HD mode (3 credits/sec vs 1 credit/sec) | false |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+| --output | -o | Output directory | Current dir |
+| --download | -d | Auto download result | false |
+
+### Background Removal
+
+```bash
+# Basic usage
+/background-removal --image ./photo.jpg
+
+# Use remote image
+/background-removal -i https://example.com/photo.jpg
+
+# Auto download result
+/background-removal -i ./photo.jpg --download
+```
+
+### Background Removal Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --image | -i | Target image file or URL | Required |
 | --api-key | -k | Your API Key | VERGING_API_KEY env |
 | --output | -o | Output directory | Current dir |
 | --download | -d | Auto download result | false |
@@ -81,15 +116,12 @@ export VERGING_API_URL="https://verging.ai/api/v1"
 
 ## Credits
 
+### Face Swap
 - Normal mode: 1 credit/second
 - HD mode: 3 credits/second
 
-## More Skills Coming Soon
-
-- Video Enhancement
-- Background Removal
-- Image to Video
-- And more...
+### Background Removal
+- 1 credit per image
 
 ## License
 
