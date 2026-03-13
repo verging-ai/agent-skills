@@ -14,9 +14,10 @@ AI-powered face swap service - Use verging.ai directly from command line.
 - Real-time progress tracking
 - Video trimming (specify start/end time)
 
-### Background Removal
-AI-powered background removal service - Remove background from images.
+### Background Removal (background-remover)
+AI one-click background removal to generate transparent PNG images.
 
+- **Perfect for**: E-commerce product photos, portrait background removal, design materials
 - Support local images (JPG, PNG, WebP)
 - Support remote image URLs
 - Auto-download remote resources
@@ -38,7 +39,7 @@ AI-powered background removal service - Remove background from images.
 /plugin install faceswap
 
 # Install background removal skill
-/plugin install background-removal
+/plugin install background-remover
 ```
 
 ## Usage

@@ -1,6 +1,6 @@
 ---
-name: background-removal
-description: AI background removal service - Remove background from images using verging.ai AI technology. Supports local images and remote image URLs.
+name: background-remover
+description: AI Background Removal - One-click AI background removal to generate transparent PNG images. Perfect for e-commerce product photos, portrait background removal, and design materials. Supports local images and remote image URLs.
 version: 1.0.0
 author: verging.ai
 category: media
@@ -15,7 +15,15 @@ metadata:
     primaryEnv: VERGING_API_KEY
 ---
 
-# background-removal - AI Background Removal Service
+# background-remover - AI Background Removal Service
+
+One-click AI background removal to generate transparent PNG images.
+
+## Use Cases
+
+- **E-commerce**: Product photos, remove background for clean product images
+- **Portraits**: Headshot background removal for professional profiles
+- **Design**: Create transparent images for graphics and marketing materials
 
 You are a CLI assistant for AI background removal. Users can use you to call verging.ai's AI background removal functionality.
 
@@ -23,7 +31,7 @@ You are a CLI assistant for AI background removal. Users can use you to call ver
 
 Users will provide commands like:
 ```
-/background-removal --image <image file or URL> [options]
+/background-remover --image <image file or URL> [options]
 ```
 
 ## Options
