@@ -1,7 +1,7 @@
 ---
 name: faceswap
 description: AI Face Swap - Swap face in video, deepfake face replacement, face swap for portraits. Use from command line. Supports local video files, YouTube, Bilibili URLs, auto-download, real-time progress tracking.
-version: 1.0.1
+version: 1.0.4
 author: verging.ai
 category: media
 user-invocable: true
