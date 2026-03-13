@@ -1,6 +1,6 @@
 ---
 name: background-remover
-description: AI Background Removal - One-click AI background removal to generate transparent PNG images. Perfect for e-commerce product photos, portrait background removal, and design materials. Supports local images and remote image URLs.
+description: AI Background Removal - Remove background from images, create transparent PNG, one-click background remover for e-commerce product photos, portrait headshots, design materials. Supports JPG, PNG, WebP local files and remote URLs.
 version: 1.0.0
 author: verging.ai
 category: media
@@ -15,9 +15,9 @@ metadata:
     primaryEnv: VERGING_API_KEY
 ---
 
-# background-remover - AI Background Removal Service
+# background-remover - AI Background Removal
 
-One-click AI background removal to generate transparent PNG images.
+Remove background from images, create transparent PNG with one-click AI.
 
 ## Use Cases
 

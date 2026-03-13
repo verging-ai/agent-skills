@@ -1,6 +1,6 @@
 ---
 name: faceswap
-description: AI face swap service - Use verging.ai AI face swap directly from command line. Supports local video files and images, remote video URLs (YouTube, Bilibili, etc.), remote image URLs, auto-download remote resources, real-time progress tracking.
+description: AI Face Swap - Swap face in video, deepfake face replacement, face swap for portraits. Use from command line. Supports local video files, YouTube, Bilibili URLs, auto-download, real-time progress tracking.
 version: 1.0.1
 author: verging.ai
 category: media
