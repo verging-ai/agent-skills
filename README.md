@@ -24,6 +24,18 @@ AI one-click background removal to generate transparent PNG images.
 - Real-time progress tracking
 - Maximum file size: 10MB
 
+### Video Enhancement (video-enhancement)
+AI video enhancement to upscale resolution, denoise, and sharpen videos.
+
+- **Perfect for**: Old video restoration, content creation, surveillance footage improvement
+- Support 2x and 4x upscale
+- Support local video files (MP4, MOV, AVI, MKV, WebM)
+- Support remote video URLs (YouTube, Bilibili, etc.)
+- Auto-download remote resources
+- Real-time progress tracking
+- Video trimming (specify start/end time)
+- Maximum video duration: 30 seconds
+
 ## Installation
 
 ### 1. Add Marketplace
@@ -40,6 +52,9 @@ AI one-click background removal to generate transparent PNG images.
 
 # Install background removal skill
 /plugin install background-remover
+
+# Install video enhancement skill
+/plugin install video-enhancement
 ```
 
 ## Usage
@@ -95,6 +110,37 @@ AI one-click background removal to generate transparent PNG images.
 | --output | -o | Output directory | Current dir |
 | --download | -d | Auto download result | false |
 
+### Video Enhancement
+
+```bash
+# Basic usage
+/video-enhancement --video ./old-video.mp4
+
+# HD mode
+/video-enhancement -v ./video.mp4 --hd
+
+# With time range
+/video-enhancement -v ./video.mp4 --hd --start 5 --end 15
+
+# Use remote video
+/video-enhancement -v "https://youtube.com/watch?v=xxx" --download
+
+# Auto download result
+/video-enhancement -v ./video.mp4 --download
+```
+
+### Video Enhancement Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --video | -v | Target video file or URL | Required |
+| --hd | -h | HD mode (3 credits/sec vs 1 credit/sec) | false |
+| --start | -ss | Start time in seconds | 0 |
+| --end | -e | End time in seconds | Video duration |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+| --output | -o | Output directory | Current dir |
+| --download | -d | Auto download result | false |
+
 ### Environment Variables
 
 ```bash
@@ -123,6 +169,10 @@ export VERGING_API_URL="https://verging.ai/api/v1"
 
 ### Background Removal
 - 1 credit per image
+
+### Video Enhancement
+- Normal mode: 1 credit/second
+- HD mode: 3 credits/second
 
 ## License
 

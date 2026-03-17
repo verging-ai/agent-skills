@@ -14,6 +14,18 @@
       "description": "AI face swap service - Use verging.ai directly from command line. Supports local video files, remote URLs, auto-download, real-time progress tracking.",
       "source": "./skills/faceswap",
       "category": "media"
+    },
+    {
+      "name": "background-remover",
+      "description": "AI background removal - Remove background from images, create transparent PNG with one-click AI.",
+      "source": "./skills/background-removal",
+      "category": "media"
+    },
+    {
+      "name": "video-enhancement",
+      "description": "AI video enhancement - Upscale video resolution, denoise, sharpen, enhance low-quality videos to HD/4K.",
+      "source": "./skills/video-enhancement",
+      "category": "media"
     }
   ]
 }
