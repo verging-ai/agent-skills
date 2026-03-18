@@ -1,6 +1,15 @@
 # verging.ai Agent Skills
 
-AI-powered media processing skills for Claude Code.
+AI-powered media processing skills for AI coding agents.
+
+## Demo
+
+### Face Swap
+[![Face Swap Demo](https://img.youtube.com/vi/xvlZe4uqvY4/maxresdefault.jpg)](https://youtu.be/xvlZe4uqvY4)
+▶️ Click to watch demo video
+
+### Video Enhancement
+![Video Enhancement Demo](https://raw.githubusercontent.com/revisual-ai/video-enhancer-demo/master/demo/before_after.gif)
 
 ## Features
 

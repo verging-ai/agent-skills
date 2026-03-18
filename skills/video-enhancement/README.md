@@ -2,13 +2,15 @@
 
 Enhance video quality using AI. Upscale resolution, denoise, sharpen low-quality videos to HD/4K.
 
-## Install
-# Claude Code
-/plugin marketplace add verging-ai/agent-skills
-/plugin install video-enhancement
+## Demo
 
-# ClawHub
-clawhub install verging-ai/agent-skills
+![Video Enhancement Demo](https://raw.githubusercontent.com/revisual-ai/video-enhancer-demo/master/demo/before_after.gif)
+
+## Install
+
+```bash
+npx skills add verging-ai/agent-skills --skill video-enhancement
+```
 
 ## Get API Key
 1. Visit https://verging.ai
