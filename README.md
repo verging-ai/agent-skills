@@ -38,23 +38,14 @@ AI video enhancement to upscale resolution, denoise, and sharpen videos.
 
 ## Installation
 
-### 1. Add Marketplace
-
 ```bash
-/plugin marketplace add verging-ai/agent-skills
-```
+# Install all skills
+npx skills add verging-ai/agent-skills
 
-### 2. Install Skills
-
-```bash
-# Install face swap skill
-/plugin install faceswap
-
-# Install background removal skill
-/plugin install background-remover
-
-# Install video enhancement skill
-/plugin install video-enhancement
+# Or install individually
+npx skills add verging-ai/agent-skills --skill faceswap
+npx skills add verging-ai/agent-skills --skill background-remover
+npx skills add verging-ai/agent-skills --skill video-enhancement
 ```
 
 ## Usage

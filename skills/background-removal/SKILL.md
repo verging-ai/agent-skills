@@ -1,5 +1,5 @@
 ---
-name: background-remover
+name: background-removal
 description: AI Background Removal - Remove background from images, create transparent PNG, one-click background remover for e-commerce product photos, portrait headshots, design materials. Supports JPG, PNG, WebP local files and remote URLs.
 version: 1.0.1
 author: verging.ai
