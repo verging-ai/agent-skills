@@ -1,0 +1,23 @@
+{
+  "name": "stt",
+  "version": "1.0.0",
+  "description": "AI Speech-to-Text - Transcribe audio files to text via verging.ai. Supports mp3, wav, webm, m4a and more. Auto language detection.",
+  "author": "verging.ai",
+  "license": "MIT",
+  "tags": ["ai", "stt", "speech", "transcription", "whisper", "audio", "verging"],
+  "entry": "skill.md",
+  "permissions": ["network", "filesystem"],
+  "minOpenClawVersion": "0.8.0",
+  "env": [
+    {
+      "name": "VERGING_API_KEY",
+      "description": "verging.ai API Key - get from https://verging.ai (Login → Click avatar → API Keys)",
+      "required": true
+    },
+    {
+      "name": "VERGING_API_URL",
+      "description": "verging.ai API URL (optional, defaults to https://verging.ai/api/v1)",
+      "required": false
+    }
+  ]
+}

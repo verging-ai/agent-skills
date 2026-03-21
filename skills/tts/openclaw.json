@@ -1,0 +1,23 @@
+{
+  "name": "tts",
+  "version": "1.0.0",
+  "description": "AI Text-to-Speech - Convert text to natural speech audio via verging.ai. Multiple voices, adjustable speed, multiple output formats.",
+  "author": "verging.ai",
+  "license": "MIT",
+  "tags": ["ai", "tts", "speech", "audio", "voice", "text-to-speech", "verging"],
+  "entry": "skill.md",
+  "permissions": ["network"],
+  "minOpenClawVersion": "0.8.0",
+  "env": [
+    {
+      "name": "VERGING_API_KEY",
+      "description": "verging.ai API Key - get from https://verging.ai (Login → Click avatar → API Keys)",
+      "required": true
+    },
+    {
+      "name": "VERGING_API_URL",
+      "description": "verging.ai API URL (optional, defaults to https://verging.ai/api/v1)",
+      "required": false
+    }
+  ]
+}

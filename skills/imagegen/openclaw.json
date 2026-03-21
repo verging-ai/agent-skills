@@ -1,0 +1,23 @@
+{
+  "name": "imagegen",
+  "version": "1.0.0",
+  "description": "AI Image Generation - Generate images from text prompts via verging.ai. Supports gpt-image-1, dall-e-3, various sizes and quality levels, batch generation.",
+  "author": "verging.ai",
+  "license": "MIT",
+  "tags": ["ai", "imagegen", "image", "generation", "dall-e", "gpt-image", "verging"],
+  "entry": "skill.md",
+  "permissions": ["network"],
+  "minOpenClawVersion": "0.8.0",
+  "env": [
+    {
+      "name": "VERGING_API_KEY",
+      "description": "verging.ai API Key - get from https://verging.ai (Login → Click avatar → API Keys)",
+      "required": true
+    },
+    {
+      "name": "VERGING_API_URL",
+      "description": "verging.ai API URL (optional, defaults to https://verging.ai/api/v1)",
+      "required": false
+    }
+  ]
+}

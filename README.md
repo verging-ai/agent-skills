@@ -1,6 +1,6 @@
 # verging.ai Agent Skills
 
-AI-powered media processing skills for AI coding agents.
+AI-powered media processing and AI service skills for AI coding agents.
 
 ## Demo
 
@@ -45,6 +45,42 @@ AI video enhancement to upscale resolution, denoise, and sharpen videos.
 - Video trimming (specify start/end time)
 - Maximum video duration: 30 seconds
 
+### Chat (chat)
+AI chat completion proxy - Access GPT-4o and other LLMs.
+
+- Support streaming and non-streaming modes
+- Multi-turn conversation
+- Token-based post-deduct billing
+
+### Text-to-Speech (tts)
+AI text-to-speech - Convert text to natural speech audio.
+
+- 6 voices: alloy, echo, fable, onyx, nova, shimmer
+- Adjustable speed (0.25x - 4.0x)
+- Multiple formats: mp3, opus, aac, flac
+- Maximum text: 4096 characters
+
+### Speech-to-Text (stt)
+AI speech-to-text - Transcribe audio files to text.
+
+- Supports mp3, mp4, wav, webm, m4a and more
+- Auto language detection
+- Maximum file size: 25 MB
+
+### Image Generation (imagegen)
+AI image generation - Generate images from text prompts.
+
+- Models: gpt-image-1, dall-e-3
+- Multiple sizes and quality levels
+- Batch generation up to 4 images
+
+### Vision Analysis (vision)
+AI vision analysis - Analyze images and answer questions.
+
+- Supports image URL and local file upload
+- GPT-4o powered visual understanding
+- Maximum image size: 20 MB
+
 ## Installation
 
 ```bash
@@ -55,6 +91,11 @@ npx skills add verging-ai/agent-skills
 npx skills add verging-ai/agent-skills --skill faceswap
 npx skills add verging-ai/agent-skills --skill background-remover
 npx skills add verging-ai/agent-skills --skill video-enhancement
+npx skills add verging-ai/agent-skills --skill chat
+npx skills add verging-ai/agent-skills --skill tts
+npx skills add verging-ai/agent-skills --skill stt
+npx skills add verging-ai/agent-skills --skill imagegen
+npx skills add verging-ai/agent-skills --skill vision
 ```
 
 ## Usage
@@ -141,6 +182,112 @@ npx skills add verging-ai/agent-skills --skill video-enhancement
 | --output | -o | Output directory | Current dir |
 | --download | -d | Auto download result | false |
 
+### Chat
+
+```bash
+# Simple question
+/chat -m "Explain Docker in 3 sentences"
+
+# Multi-turn with streaming
+/chat --messages '[{"role":"system","content":"You are a Python expert"},{"role":"user","content":"How to read CSV?"}]' --stream
+```
+
+### Chat Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --message | -m | Single user message | Required (or --messages) |
+| --messages | -M | Full messages JSON array | Required (or --message) |
+| --model | | LLM model | gpt-4o |
+| --temperature | -t | Sampling temperature (0-2) | Provider default |
+| --max-tokens | | Max response tokens | Provider default |
+| --stream | -s | Enable streaming | false |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+
+### Text-to-Speech
+
+```bash
+# Basic usage
+/tts -t "Hello, welcome to verging.ai"
+
+# Choose voice and save to file
+/tts --text "你好世界" --voice nova --output ./speech.mp3
+```
+
+### TTS Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --text | -t | Text to convert (max 4096 chars) | Required |
+| --voice | -v | alloy, echo, fable, onyx, nova, shimmer | alloy |
+| --model | | tts-1, tts-1-hd | tts-1-hd |
+| --format | -f | mp3, opus, aac, flac | mp3 |
+| --speed | -s | 0.25 to 4.0 | 1.0 |
+| --output | -o | Save audio file to path | (URL only) |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+
+### Speech-to-Text
+
+```bash
+# Basic usage
+/stt -f ./meeting.mp3
+
+# With language hint
+/stt --file ./interview.wav --language zh
+```
+
+### STT Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --file | -f | Audio file path | Required |
+| --model | | STT model | whisper-1 |
+| --language | -l | Language hint (ISO 639-1) | Auto-detect |
+| --format | | json, text, srt, vtt | json |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+
+### Image Generation
+
+```bash
+# Basic usage
+/imagegen -p "a cat sitting on a rainbow"
+
+# High quality, multiple images
+/imagegen --prompt "product photo of red sneaker" --quality high --n 2 --output ./images/
+```
+
+### Image Generation Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --prompt | -p | Text description | Required |
+| --model | | gpt-image-1, dall-e-3 | gpt-image-1 |
+| --size | -s | 1024x1024, 1024x1536, etc. | 1024x1024 |
+| --quality | -q | auto, low, medium, high | auto |
+| --n | -n | Number of images (1-4) | 1 |
+| --output | -o | Save images to directory | (URL only) |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+
+### Vision Analysis
+
+```bash
+# Analyze local image
+/vision -i ./screenshot.png -p "What errors are shown?"
+
+# Analyze remote image
+/vision --image "https://example.com/chart.png" --prompt "Summarize this chart"
+```
+
+### Vision Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| --image | -i | Image file path or URL | Required |
+| --prompt | -p | Question about the image | Required |
+| --model | | Vision model | gpt-4o |
+| --max-tokens | | Max response tokens | 1024 |
+| --api-key | -k | Your API Key | VERGING_API_KEY env |
+
 ### Environment Variables
 
 ```bash
@@ -173,6 +320,21 @@ export VERGING_API_URL="https://verging.ai/api/v1"
 ### Video Enhancement
 - Normal mode: 1 credit/second
 - HD mode: 3 credits/second
+
+### Chat
+- Post-deduct billing based on token usage
+
+### Text-to-Speech
+- Pre-deduct billing based on character count
+
+### Speech-to-Text
+- Pre-deduct billing based on audio duration
+
+### Image Generation
+- Pre-deduct billing based on model, size, quality, and count
+
+### Vision Analysis
+- Post-deduct billing: 2 base credits + token cost
 
 ## License
 

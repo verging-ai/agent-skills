@@ -1,0 +1,23 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "AI Chat Completion - LLM chat proxy via verging.ai. Supports GPT-4o and other models, streaming and non-streaming modes, token-based billing.",
+  "author": "verging.ai",
+  "license": "MIT",
+  "tags": ["ai", "chat", "llm", "gpt", "completion", "verging"],
+  "entry": "skill.md",
+  "permissions": ["network"],
+  "minOpenClawVersion": "0.8.0",
+  "env": [
+    {
+      "name": "VERGING_API_KEY",
+      "description": "verging.ai API Key - get from https://verging.ai (Login → Click avatar → API Keys)",
+      "required": true
+    },
+    {
+      "name": "VERGING_API_URL",
+      "description": "verging.ai API URL (optional, defaults to https://verging.ai/api/v1)",
+      "required": false
+    }
+  ]
+}

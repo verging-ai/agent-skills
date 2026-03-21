@@ -1,0 +1,23 @@
+{
+  "name": "vision",
+  "version": "1.0.0",
+  "description": "AI Vision Analysis - Analyze images with AI, describe content, answer questions about images via verging.ai. Supports image URL and local file upload.",
+  "author": "verging.ai",
+  "license": "MIT",
+  "tags": ["ai", "vision", "image", "analysis", "gpt-4o", "visual", "verging"],
+  "entry": "skill.md",
+  "permissions": ["network", "filesystem"],
+  "minOpenClawVersion": "0.8.0",
+  "env": [
+    {
+      "name": "VERGING_API_KEY",
+      "description": "verging.ai API Key - get from https://verging.ai (Login → Click avatar → API Keys)",
+      "required": true
+    },
+    {
+      "name": "VERGING_API_URL",
+      "description": "verging.ai API URL (optional, defaults to https://verging.ai/api/v1)",
+      "required": false
+    }
+  ]
+}
