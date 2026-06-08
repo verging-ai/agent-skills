@@ -1,6 +1,6 @@
-# tts - AI Text-to-Speech
+# tts - AI Text-to-Speech Generation
 
-Convert text to natural speech audio via verging.ai. Multiple voices and output formats.
+Convert text to natural-sounding speech audio using OpenAI TTS-1-HD via the verging.ai API. Six voices, adjustable speed.
 
 ## Install
 
@@ -8,17 +8,56 @@ Convert text to natural speech audio via verging.ai. Multiple voices and output 
 npx skills add verging-ai/agent-skills --skill tts
 ```
 
-## Get API Key
-1. Visit https://verging.ai
-2. Login → Click user avatar (top right) → Select "API Keys" from dropdown
-3. Create key → Set: export VERGING_API_KEY="your_key"
+## Setup
 
-## Options (optional)
-- --voice: alloy, echo, fable, onyx, nova, shimmer (default: alloy)
-- --model: tts-1, tts-1-hd (default: tts-1-hd)
-- --format: mp3, opus, aac, flac (default: mp3)
-- --speed: 0.25 to 4.0 (default: 1.0)
-- --output: Save audio file to path
+1. Visit [verging.ai](https://verging.ai)
+2. Login → Click avatar (top right) → API Keys
+3. Create a key, then set it:
+
+```bash
+export VERGING_API_KEY="vrg_sk_your_key_here"
+```
+
+## Usage
+
+```bash
+# Generate speech from text
+curl -X POST https://verging.ai/api/v1/ai/tts \
+  -H "Authorization: ApiKey $VERGING_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "Hello! Welcome to verging.ai.",
+    "voice": "nova",
+    "speed": 1.0
+  }'
+```
+
+## Available Voices
+
+| Voice | Style |
+|-------|-------|
+| alloy | Neutral, balanced |
+| echo | Warm, rounded |
+| fable | Expressive, British |
+| onyx | Deep, authoritative |
+| nova | Friendly, upbeat |
+| shimmer | Soft, gentle |
+
+## Features
+
+- Powered by OpenAI TTS-1-HD model
+- 6 distinct voice options
+- Adjustable playback speed (0.25x–4.0x)
+- MP3 output with CDN delivery
+- Max input: 4096 characters
 
 ## Credits
-- Pre-deduct billing based on character count
+
+| Rate | Minimum |
+|------|---------|
+| 1 credit / 1K characters | 1 credit |
+
+## Links
+
+- Website: https://verging.ai
+- API Docs: https://verging.ai/docs/api

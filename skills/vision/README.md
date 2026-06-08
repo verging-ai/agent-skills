@@ -1,6 +1,6 @@
-# vision - AI Vision Analysis
+# vision - AI Image Analysis
 
-Analyze images with AI, describe content, answer questions about images via verging.ai.
+Analyze images using GPT-4o Vision via the verging.ai API. Supports both image URL and file upload modes.
 
 ## Install
 
@@ -8,17 +8,53 @@ Analyze images with AI, describe content, answer questions about images via verg
 npx skills add verging-ai/agent-skills --skill vision
 ```
 
-## Get API Key
-1. Visit https://verging.ai
-2. Login → Click user avatar (top right) → Select "API Keys" from dropdown
-3. Create key → Set: export VERGING_API_KEY="your_key"
+## Setup
 
-## Options (optional)
-- --model: Vision model (default: gpt-4o)
-- --max-tokens: Max response tokens (default: 1024)
+1. Visit [verging.ai](https://verging.ai)
+2. Login → Click avatar (top right) → API Keys
+3. Create a key, then set it:
 
-## Supported Image Formats
-PNG, JPG, JPEG, GIF, WebP (max 20MB)
+```bash
+export VERGING_API_KEY="vrg_sk_your_key_here"
+```
+
+## Usage
+
+```bash
+# Analyze an image by URL
+curl -X POST https://verging.ai/api/v1/ai/vision \
+  -H "Authorization: ApiKey $VERGING_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Describe what you see in this image.",
+    "image_url": "https://example.com/photo.jpg"
+  }'
+
+# Analyze a local image file
+curl -X POST https://verging.ai/api/v1/ai/vision/upload \
+  -H "Authorization: ApiKey $VERGING_API_KEY" \
+  -F "prompt=What objects are in this image?" \
+  -F "file=@photo.jpg"
+```
+
+## Features
+
+- Powered by GPT-4o Vision
+- Two modes: image URL (JSON) or file upload (multipart)
+- Detailed scene description, object detection, text extraction
+- Configurable max_tokens for response length
 
 ## Credits
-- Post-deduct billing: 2 base credits + token cost
+
+| Component | Rate |
+|-----------|------|
+| Base fee | 2 credits |
+| Input tokens | 1 credit / 10K tokens |
+| Output tokens | 3 credits / 10K tokens |
+
+Minimum charge: 2 credits per request. Requires 5 credits minimum balance.
+
+## Links
+
+- Website: https://verging.ai
+- API Docs: https://verging.ai/docs/api
